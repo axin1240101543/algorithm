@@ -68,20 +68,15 @@ public class TwoSum1 {
             return null;
         }
 
-        //如果值重复  那么只会保留最大的值的下标
         Map<Integer, Integer> map = new HashMap<>();
         for (int i = 0; i < nums.length; i++) {
+            int other = target - nums[i];
+            if (map.containsKey(other)){
+                return new int[]{map.get(other), i};
+            }
             map.put(nums[i], i);
         }
-
-        for (int i = 0; i < nums.length; i++) {
-            int other = target - nums[i];
-            //如果第二个值在集合中 且 下标不等于当前值的下标，那么就找到了第二个值
-            if (map.containsKey(other) && i != map.get(other)) {
-                return new int[]{i, map.get(other)};
-            }
-        }
-        return new int[]{0, 0};
+        return new int[]{0,0};
     }
 
 }
