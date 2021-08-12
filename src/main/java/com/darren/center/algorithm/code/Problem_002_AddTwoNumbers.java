@@ -1,5 +1,7 @@
 package com.darren.center.algorithm.code;
 
+import java.util.Objects;
+
 public class Problem_002_AddTwoNumbers {
 
     public static void main(String[] args) {
@@ -14,11 +16,12 @@ public class Problem_002_AddTwoNumbers {
         l12.val = 4;
         l12.next = l13;
 
-        l13.val = 3;
+        l13.val = 9;
 
         ListNode l2 = new ListNode();
         ListNode l22 = new ListNode();
         ListNode l23 = new ListNode();
+        ListNode l24 = new ListNode();
 
         l2.val = 5;
         l2.next = l22;
@@ -27,14 +30,44 @@ public class Problem_002_AddTwoNumbers {
         l22.next = l23;
 
         l23.val = 4;
+        l23.next = l24;
 
-        addTwoNumbers(l1, l2);
+        l24.val = 9;
+
+        ListNode listNode = addTwoNumbers2(l1, l2);
+
+        print(listNode);
     }
 
-    public static ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+    public static ListNode addTwoNumbers2(ListNode l1, ListNode l2) {
        if (l1 == null || l2 == null){
            return null;
        }
+        ListNode head = new ListNode();
+        ListNode cur = head;
+        int carry = 0;
+        while (l1 != null || l2!= null){
+            int sum = ((l1 == null) ? 0 : l1.val) + ((l2 == null) ? 0 : l2.val) + carry;
+            carry = sum / 10;
+            cur.next = new ListNode(sum % 10);
+            cur = cur.next;
+            if (l1 != null){
+                l1 = l1.next;
+            }
+            if (l2 != null){
+                l2 = l2.next;
+            }
+        }
+        if (carry != 0){
+            cur.next = new ListNode(carry);
+        }
+        return head.next;
+    }
+
+    public static ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        if (l1 == null || l2 == null){
+            return null;
+        }
         ListNode first = l1;
         ListNode second = l2;
         ListNode head = null;
@@ -118,6 +151,13 @@ public class Problem_002_AddTwoNumbers {
         }
 
         return head;
+    }
+
+    private static void print(ListNode node){
+        if (node != null){
+            System.out.println(node.val);
+            print(node.next);
+        }
     }
 
      static class ListNode {
