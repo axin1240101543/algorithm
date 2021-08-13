@@ -1,7 +1,5 @@
 package com.darren.center.algorithm.code;
 
-import java.util.Objects;
-
 public class Problem_002_AddTwoNumbers {
 
     public static void main(String[] args) {
