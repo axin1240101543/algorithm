@@ -32,9 +32,50 @@ public class Problem_002_AddTwoNumbers {
 
         l24.val = 9;
 
-        ListNode listNode = addTwoNumbers2(l1, l2);
+        ListNode listNode = addTwoNumbers3(l1, l2);
 
         print(listNode);
+    }
+
+
+    public static ListNode addTwoNumbers3(ListNode l1, ListNode l2) {
+        if(l1 == null || l2 == null){
+            return null;
+        }
+        ListNode head = null;
+        ListNode pre = null;
+        Boolean flag = false;
+        while(l1 != null || l2 != null){
+            int sum = ((l1 == null) ? 0 : l1.val) + ((l2 == null) ? 0 : l2.val);
+            if(flag){
+                sum++;
+                flag = false;
+            }
+            if(sum >= 10){
+                sum = sum % 10;
+                flag = true;
+            }
+            if(head == null){
+                head = new ListNode();
+                head.val = sum;
+                pre = head;
+            }else{
+                ListNode cur = new ListNode();
+                cur.val = sum;
+                pre.next = cur;
+                pre = cur;
+            }
+            if(l1 != null){
+                l1 = l1.next;
+            }
+            if(l2 != null){
+                l2 = l2.next;
+            }
+        }
+        if(flag){
+            pre.next = new ListNode(1);
+        }
+        return head;
     }
 
     public static ListNode addTwoNumbers2(ListNode l1, ListNode l2) {
