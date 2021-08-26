@@ -20,6 +20,26 @@ public class Problem_226_InvertBinaryTree {
         }
     }
 
+    public TreeNode invertTree(TreeNode root) {
+        if(root != null) {
+            invert(root);
+        }
+        return root;
+    }
+
+    public void invert(TreeNode root){
+        TreeNode temp = root.left;
+        if(root.left != null) {
+            invert(root.left);
+        }
+        root.left = root.right;
+
+        if(root.right != null){
+            invert(root.right);
+        }
+        root.right = temp;
+    }
+
     public class TreeNode {
         int val;
         TreeNode left;
