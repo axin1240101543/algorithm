@@ -32,13 +32,15 @@ public class Problem_045_JumpGameIii {
             int ans1 = solution.jump(arr, n, start, end);
             int ans2 = solution.jump2(arr, n, start, end);
             int ans3 = solution.jump3(arr, n, start, end);
-            if (ans1 != ans2 && ans1 != ans3){
+            int ans4 = solution.jump4(arr, n, start, end);
+            if (ans1 != ans2 && ans1 != ans3 && ans1 != ans4){
                 printArray(arr);
                 System.out.println("start:" + start);
                 System.out.println("end:" + end);
                 System.out.println("ans1:" + ans1);
                 System.out.println("ans2:" + ans2);
                 System.out.println("ans3:" + ans3);
+                System.out.println("ans4:" + ans4);
                 break;
             }
         }
@@ -46,6 +48,64 @@ public class Problem_045_JumpGameIii {
     }
     //leetcode submit region begin(Prohibit modification and deletion)
     class Solution {
+
+        /**
+         * 动态规划
+         * @param arr
+         * @param N
+         * @param start
+         * @param end
+         * @return
+         */
+        public int jump4(int[] arr, int N, int start, int end) {
+            int[][] dp = new int[N + 1][N + 1];
+            for (int i = 0; i < dp.length; i++) {
+                for (int j = 0; j < dp[0].length; j++) {
+                    dp[i][j] = -2;
+                }
+            }
+            // dp[i][k] == -2表示这个过程没算过
+            // dp[i][k] != -2表示这个过程算过了
+            return f2(N, end, arr, start, 0, dp);
+        }
+
+        // 一共有N个位置，跳的过程中，如果你又跳回到某个位置，其实这已经说明不是最优步数了
+        // 也就是说，如果存在最优的跳法，那么这个最优跳法一定不会大于N-1步
+        // 所以，增加了一个参数k，表示已经跳了多少步
+        // 整个函数的含义：
+        // 一共有1~N个位置，目标是aim位置
+        // 所有位置能跳的距离都记录在arr中，并且对任意的arr[i] > 0
+        // 当前来到的位置是i, 之前已经跳过了k步，
+        // 返回最后到达aim位置，跳的最少的步数
+        // 如果返回-1表示怎么也无法到达
+        public int f2(int N, int aim, int[] arr, int i, int k, int[][] dp) {
+            if (i < 1 || i > N || k > N - 1) {
+                return -1;
+            }
+            if (dp[i][k] != -2) {
+                return dp[i][k];
+            }
+            if (i == aim) {
+                dp[i][k] = k;
+                return k;
+            }
+            // 请注意，arr的下标是从0开始的，但是题目规定的下标从1开始
+            // 所以，拿出i位置能跳的距离，需要拿arr[i-1]位置的值
+            int ans1 = f2(N, aim, arr, i + arr[i - 1], k + 1, dp);
+            int ans2 = f2(N, aim, arr, i - arr[i - 1], k + 1, dp);
+            int ans = -1;
+            if (ans1 != -1 && ans2 != -1) {
+                ans = Math.min(ans1, ans2);
+            }
+            if (ans1 != -1 && ans2 == -1) {
+                ans = ans1;
+            }
+            if (ans1 == -1 && ans2 != -1) {
+                ans = ans2;
+            }
+            dp[i][k] = ans;
+            return ans;
+        }
 
         /**
          *
@@ -154,6 +214,8 @@ public class Problem_045_JumpGameIii {
             if (next == -1){
                 return -1;
             }
+
+            //从i到left或者right还需要一步
             return next + 1;
         }
 
@@ -168,6 +230,9 @@ public class Problem_045_JumpGameIii {
          * 宽度优先遍历（时间复杂度：O(N），最优解），要注意越界和重复值
          */
         public int jump(int[] nums, int n, int start, int end) {
+            if (start < 1 || start > n || end < 1 || end > n){
+                return -1;
+            }
             Queue<Integer> queue = new LinkedList<>();
             //Integer表示下标  Integer表示在第几层
             Map<Integer, Integer> levelMap = new HashMap<>();
