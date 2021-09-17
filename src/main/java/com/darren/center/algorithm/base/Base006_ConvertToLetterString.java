@@ -1,10 +1,5 @@
 package com.darren.center.algorithm.base;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 /**
  * <h3>algorithm</h3>
  * <p></p>
@@ -58,7 +53,7 @@ public class Base006_ConvertToLetterString {
         // 2、（index+1的字符不能小于0 且 超过6，因为组团的最小值是20，最大值是26 -> Z）index和index+1组团去转化，然后index+2你自己去玩吧
         if (str[index] == '2'){
             int res = process(str, index + 1);
-            if (index + 1 < str.length && (str[index] >= '0' && str[index] <= '6')){
+            if (index + 1 < str.length && (str[index + 1] >= '0' && str[index + 1] <= '6')){
                 res = res + process(str, index + 2);
             }
             return res;
