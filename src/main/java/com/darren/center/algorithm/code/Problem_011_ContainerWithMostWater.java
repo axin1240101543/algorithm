@@ -15,14 +15,16 @@ public class Problem_011_ContainerWithMostWater {
     class Solution {
         public int maxArea(int[] height) {
             int max = 0;
-            int left = 0;
-            int right = height.length - 1;
-            while (left < right){
-                max = Math.max(max, Math.min(height[left], height[right]) * (right - left));
-                if (height[left] > height[right]){
-                    right--;
+            int l = 0;
+            int r = height.length - 1;
+            while (l < r){
+                int min = Math.min(height[l], height[r]);
+                int curMax = min * (r - l);
+                max = Math.max(max, curMax);
+                if (height[l] > height[r]){
+                    r--;
                 }else{
-                    left++;
+                    l++;
                 }
             }
             return max;
