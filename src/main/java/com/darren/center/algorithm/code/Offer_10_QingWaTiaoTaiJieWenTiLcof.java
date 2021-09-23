@@ -15,6 +15,8 @@ public class Offer_10_QingWaTiaoTaiJieWenTiLcof {
 
     public static void main(String[] args) {
         Solution solution = new Offer_10_QingWaTiaoTaiJieWenTiLcof().new Solution();
+        int res = solution.numWays1(44);
+        System.out.println(res);
     }
     class Solution {
 
@@ -50,6 +52,28 @@ public class Offer_10_QingWaTiaoTaiJieWenTiLcof {
                 nums[i] = (nums[i - 1] + nums[i - 2]) % 1000000007;
             }
             return nums[n];
+        }
+
+        public int numWays1(int n) {
+            int[] dp = new int[n + 1];
+
+            if (n >= 0){
+                dp[0] = 1;
+            }
+
+            if (n >= 1){
+                dp[1] = 1;
+            }
+
+            if (n >= 2){
+                dp[2] = 2;
+            }
+
+            for (int i = 3; i <= n; i++) {
+                dp[i] = (dp[i - 1] + dp[i - 2]) % 1000000007;
+            }
+
+            return dp[n];
         }
 
     }
