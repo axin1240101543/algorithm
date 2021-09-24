@@ -207,6 +207,160 @@ public class Problem_004_MedianOfTwoSortedArrays {
             return Math.min(a[s1], b[s2]);
         }
 
+
+        public double findMedianSortedArrays1(int[] nums1, int[] nums2) {
+            int l1 = nums1.length;
+            int l2 = nums2.length;
+            int m = 0;
+            boolean flag = (l1 + l2) % 2 == 0;
+            if (nums1.length != 0 && nums2.length != 0){
+                //注意m不是下标
+                m = (l1 + l2) >> 1;
+                if (flag){
+                    int first = f1(nums1, nums2, m);
+                    int second = f1(nums1, nums2, m + 1);
+                    return (double)(first + second) / 2;
+                }else{
+                    return (double) f1(nums1, nums2, m + 1);
+                }
+            }else if (nums1.length != 0){
+                //注意m是下标
+                m = (l1 - 1) >> 1;
+                if (flag){
+                    int first = nums1[m];
+                    int second = nums1[m + 1];
+                    return (double)(first + second) / 2;
+                }else{
+                    return nums1[m];
+                }
+            }else if (nums2.length != 0){
+                //注意m是下标
+                m = (l2 - 1) >> 1;
+                if (flag){
+                    int first = nums2[m];
+                    int second = nums2[m + 1];
+                    return (double)(first + second) / 2;
+                }else{
+                    return nums2[m];
+                }
+            }
+            return 0.0;
+        }
+
+
+        //两个有序不一定等长数组，返回第k小的数
+        //k的位置在哪儿 k不是下标
+        //当排除数时  等于的情况也算
+        public int f1(int[] nums1, int[] nums2, int k){
+            int[] longs = nums1.length >= nums2.length ? nums1 : nums2;
+            int[] shorts = nums1.length < nums2.length ? nums1 : nums2;
+            int l = longs.length;
+            int s = shorts.length;
+            if (k <= s){
+                //1234 4
+                //123456 6
+                //k = 3
+                return f2(shorts, 0, k - 1, longs, 0, k - 1);
+            }else if (k > s && k <= l){
+                //1234 4
+                //0123 下标
+                //1'2'3'4'5'6'7'8' 8
+                //0 1 2 3 4 5 6 7 下标
+                //k = 6
+                //1234
+                //0123 下标
+                //2'3'4'5'6'
+                //1 2 3 4 5 下标
+                //手动排除2' 2'大于4 那么2'就是第六小
+                //1 + 1 + 4 = 6 第六小
+                if (longs[k - s - 1] >= shorts[s - 1]){
+                    return longs[k - s - 1];
+                }
+                return f2(shorts, 0, s - 1, longs, k - s, k - 1);
+            }
+            // k > l
+            //1234 4
+            //0123 下标
+            //1'2'3'4'5'6'7'8' 8
+            //0 1 2 3 4 5 6 7 下标
+            //k = 10
+            //234
+            //123 下标
+            //6'7'8'
+            //5 6 7
+            //1 + 5 + 3 = 第九小
+            //34
+            //23 下标
+            //7'8'
+            //6 7
+            //手动排除2和6' 1 + 7 + 2 第十小
+            //2 干过 8' 那么2就是 第十小
+            if (shorts[k - l - 1] >= longs[l - 1]){
+                return shorts[k - l - 1];
+            }
+            //6' 干过 4 那么6'就是 第十小
+            if (longs[k - s - 1] >= shorts[s - 1]){
+                return longs[k - s - 1];
+            }
+            return f2(shorts, k - l, s - 1, longs, k - s, l - 1);
+        }
+
+        //两个有序且等长的数组，取出上中位数
+        //奇数 偶数
+        //当排除数时  等于的情况也算
+        public int f2(int[] nums1, int s1, int e1, int[] nums2, int s2, int e2){
+            int m1 = 0;
+            int m2 = 0;
+            while (s1 < e1){
+                m1 = (s1 + e1) >> 1;
+                m2 = (s2 + e2) >> 1;
+                if (nums1[m1] == nums2[m2]){
+                    return nums1[m1];
+                }
+
+                if ((e1 - s1 + 1) % 2 == 0){
+                    //1234
+                    //1'2'3'4'
+                    //寻找第四小 也就是上中位数
+                    if (nums1[m1] > nums2[m2]){
+                        //2 > 2'  1 2 3' 4'
+                        e1 = m1;
+                        s2 = m2 + 1;
+                    }else{
+                        //2 < 2'  3 4 1' 2'
+                        s1 = m1 + 1;
+                        e2 = m2;
+                    }
+                }else{
+                    //12345
+                    //1'2'3'4'5'
+                    //寻找第五小 也就是上中位数
+                    if (nums1[m1] > nums2[m2]){
+                        //3 > 3' 1 2 3' 4' 5'
+                        //手动排除3' 如果3'干过了2 那么3'就是第五小
+                        if (nums2[m2] >= nums1[m1 - 1]){
+                            return nums2[m2];
+                        }
+                        e1 = m1 - 1;
+                        s2 = m2 + 1;
+                    }else{
+                        //3 < 3' 3 4 5 1' 2'
+                        //手动排除3 如果3干过了2' 那么3就是第五小
+                        if (nums1[m1] >= nums2[m2 - 1]){
+                            return nums1[m1];
+                        }
+                        s1 = m1 + 1;
+                        e2 = m2 - 1;
+                    }
+                }
+            }
+            //1
+            //3'
+            //寻找第一小
+            //s1和s2哪个小  哪个就是第一小
+            return Math.min(nums1[s1], nums2[s2]);
+        }
+
         public int f2(int[] mArr){
             int mid = (mArr.length - 1) / 2;
             return mArr[mid];
