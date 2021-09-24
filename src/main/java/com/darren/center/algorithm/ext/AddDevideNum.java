@@ -45,7 +45,23 @@ public class AddDevideNum {
     }
 
 
-
+    /**
+     * 打印一个数的阶乘
+     * @param num
+     * @param index
+     */
+    public static void factorial(int num, int index){
+        if (index == -1){
+            System.out.println(num);
+        }else {
+            for (int i = index; i >= 0; i--) {
+                int lv = num / arr[index] % 10;
+                int rv = num / arr[i] % 10;
+                int next = num - (lv - rv) * arr[index] + (lv - rv) * arr[i];
+                factorial(next, index - 1);
+            }
+        }
+    }
 
 
     public static int count = 0;
@@ -54,14 +70,20 @@ public class AddDevideNum {
         process1(123456789, 8, n, ans);
     }
     public static void process1(int num, int index, int n, Map<String, Integer> ans){
-        //所有的9！已经加工好了，只需要分配符号的位置
+        //已经加工好了一个数，只需要分配符号的位置
         if (index == -1){
 //            System.out.println(num);
             count++;
+            //加号的范围是[8 .. 2]
+            //1[234567]89
+            //8 765432 10
             for(int add = 8; add >= 2; add--){
                 int p1 = num / arr[add];
                 // p2 + p3 部分
                 int remain = num % arr[add];
+                //除号的活动范围
+                //12345[678]9
+                //87654 321 0
                 for (int divide = add / 2; divide >= 1; divide--){
                     sumCount++;
                     int p2 = remain / arr[divide];
@@ -75,6 +97,11 @@ public class AddDevideNum {
                 }
             }
         }else{
+            //9!
+            //index = 8  index位置的数和num[8 ... 0]范围的数进行交换
+            //index = 7  index位置的数和num[7 ... 0]范围的数进行交换
+            //...
+            //9!
             for (int i = index; i >= 0; i--) {
                 int next = swap(num, index, i);
                 process1(next, index - 1, n, ans);
@@ -104,12 +131,18 @@ public class AddDevideNum {
     // + 放2位置 / 只能放 1 位置    （p1:abcdefg p2 / p3 必须整除必须整除）
     // 一共16次  362880*16 = 5806080 < 10^8(100000000)
     public static void process(int num, int index){
-        //所有的9！已经加工好了，只需要分配符号的位置
+        //已经加工好了一个数，只需要分配符号的位置
         if (index == -1){
+            //加号的范围是[8 .. 2]
+            //1[234567]89
+            //8 765432 10
             for(int add = 8; add >= 2; add--){
                 int p1 = num / arr[add];
                 // p2 + p3 部分
                 int remain = num % arr[add];
+                //除号的活动范围
+                //12345[678]9
+                //87654 321 0
                 for (int divide = add >> 1; divide >= 1; divide--){
                     int p2 = remain / arr[divide];
                     int p3 = remain % arr[divide];
@@ -125,6 +158,10 @@ public class AddDevideNum {
             }
         }else{
             //从左往右指定数字，让后面的数交换到index位置
+            //index = 8  index位置的数和num[8 ... 0]范围的数进行交换
+            //index = 7  index位置的数和num[7 ... 0]范围的数进行交换
+            //...
+            //9!
             for (int i = index; i >= 0; i--) {
                 int next = swap(num, index, i);
                 process(next, index - 1);
@@ -156,8 +193,13 @@ public class AddDevideNum {
      * @param r
      */
     public static int swap(int num, int l , int r){
+        //l和r 从右往左 从0开始
+        //拿到l和r位置的数
         int lNum = (num / arr[l]) % 10;
         int rNum = (num / arr[r]) % 10;
+        //System.out.println(lv);
+        //System.out.println(rv);
+        //差值 -+
         return num - (lNum - rNum) * arr[l] + (lNum - rNum) * arr[r];
     }
 
