@@ -14,6 +14,62 @@ public class Problem_008_StringToIntegerAtoi {
         solution.myAtoi("words and 987");
     }
     class Solution {
+
+        public int myAtoi1(String s){
+            s = s.trim();
+            boolean neg = false;
+
+            //判断正负 正号和负号只取一次
+            if (s.startsWith("-")){
+                neg = true;
+                s = s.substring(1);
+            }else if (s.startsWith("+")){
+                s = s.substring(1);
+            }
+
+            //只有开头是数字的才能算有效
+            //除了第一个可能是正好或者负号之外 找到第一个不是0的位置
+            int start = 0;
+            for (; start < s.length(); start++) {
+                if (s.charAt(start) != '0'){
+                    break;
+                }
+            }
+
+            //从右往左  找到最左上不是字符的位置
+            int end = -1;
+            for (int i = s.length(); i >= start; i--) {
+                if (s.charAt(i) < '0' || s.charAt(i) > '9'){
+                    end = i;
+                }
+            }
+
+            s = s.substring(start, end == -1 ? s.length() : end);
+
+            //如果此时s为空 则无效
+            if (s.length() == 0){
+                return 0;
+            }
+
+            int m = Integer.MIN_VALUE / 10;
+            int n = Integer.MIN_VALUE % 10;
+            int res = 0;
+            for (int i = 0; i < s.length(); i++) {
+                //变成负数 因为负数最大值比正数最大值多一个
+                int cur = '0' - s.charAt(i);
+                if (res < m || (res == m && cur < n)){
+                    return neg ? Integer.MIN_VALUE : Integer.MAX_VALUE;
+                }
+                res = res * 10 + cur;
+            }
+
+            if (!neg && res == Integer.MIN_VALUE){
+                return Integer.MAX_VALUE;
+            }
+
+            return neg ? res : Math.abs(res);
+        }
+
         public int myAtoi(String s) {
             if (s == null || s.equals("")){
                 return 0;
