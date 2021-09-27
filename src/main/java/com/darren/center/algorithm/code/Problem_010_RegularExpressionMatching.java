@@ -47,14 +47,25 @@ public class Problem_010_RegularExpressionMatching {
             int M = p.length;
             boolean[][] dp = new boolean[N + 1][M + 1];
             dp[N][M] = true;
+
+            //填写最后一行的结果
             for (int j = M - 1; j >= 0; j--) {
                 dp[N][j] = (j + 1 < M && p[j + 1] == '*') && dp[N][j + 2];
             }
+
+            //最后一个列不用填写 因为默认就是false 此时pi已经来到终点位置 但si还不是终点位置
+
+            //为什么要单独判断第二列 因为一个普遍位置依赖pi + 2列
             // dp[0..N-2][M-1]都等于false，只有dp[N-1][M-1]需要讨论
+            //因为此时pattern只剩下一个字符 而str的字符是0..n-2 大于一个字符 所以直接就是false
+            //当n-1 行和 m-1列，此时str只剩下一个字符 pattern也只剩下一个字符 那么如果他们相等或者pattern位置的字符是.那么就是true 否则就是false
             if (N > 0 && M > 0) {
                 dp[N - 1][M - 1] = (s[N - 1] == p[M - 1] || p[M - 1] == '.');
             }
+
+            //从最后一行 从下往上开始填写
             for (int i = N - 1; i >= 0; i--) {
+                //从倒数第二列 从后往前开始填写
                 for (int j = M - 2; j >= 0; j--) {
                     if (p[j + 1] != '*') {
                         dp[i][j] = ((s[i] == p[j]) || (p[j] == '.')) && dp[i + 1][j + 1];
