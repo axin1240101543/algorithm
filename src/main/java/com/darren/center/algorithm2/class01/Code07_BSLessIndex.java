@@ -1,4 +1,4 @@
-package com.darren.center.algorithm2.class02;
+package com.darren.center.algorithm2.class01;
 
 import java.util.ArrayList;
 import java.util.List;

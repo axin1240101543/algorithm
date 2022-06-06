@@ -1,6 +1,6 @@
-package com.darren.center.algorithm2.class05;
+package com.darren.center.algorithm2.class04;
 
-import com.darren.center.algorithm2.class02.LogarithmMachine;
+import com.darren.center.algorithm2.class01.LogarithmMachine;
 
 /**
  * <h3>algorithm</h3>

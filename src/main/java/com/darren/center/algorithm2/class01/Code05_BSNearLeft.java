@@ -1,19 +1,19 @@
-package com.darren.center.algorithm2.class02;
+package com.darren.center.algorithm2.class01;
 
 /**
  * <h3>spring-boot-2020-gitee</h3>
- * <p>找到一个有序数组中<=一个数最右的位置</p>
+ * <p>找到一个有序数组中>=一个数最左的位置</p>
  *
  * 二分
  *
- * 1 2 3 3 4 8 9 9 9 10
- *                 8
- * 此时<=9的最右的位置就是8位置
+ * 1 2 3 3 3 4 8 9 10
+ *     2
+ * 此时>=3的最左的位置就是2位置
  *
  * @author : Darren
- * @date : 2022年02月15日 20:17:15
+ * @date : 2022年02月14日 21:16:56
  **/
-public class Code06_BSNearRight {
+public class Code05_BSNearLeft {
 
     public static void main(String[] args) {
         int count = 500000;
@@ -24,7 +24,7 @@ public class Code06_BSNearRight {
             int[] var1 = LogarithmMachine.generateRandomArray(maxSize, maxValue);
             int num = LogarithmMachine.generateRandom(100);
             LogarithmMachine.sort(var1);
-            if (nearRight(var1, num) != nearRight2(var1, num)){
+            if (nearLeft(var1, num) != nearLeft1(var1, num)){
                 success = false;
                 LogarithmMachine.printArray(var1);
                 System.out.println(num);
@@ -34,7 +34,7 @@ public class Code06_BSNearRight {
         System.out.println(success ? "success" : "failure");
     }
 
-    public static int nearRight(int[] arr, int num){
+    public static int nearLeft(int[] arr, int num){
         if (arr == null || arr.length == 0){
             return -1;
         }
@@ -44,22 +44,23 @@ public class Code06_BSNearRight {
         int index = -1;
         while (l <= r){
             mid = l + ((r - l) >> 1);
-            if (arr[mid] <= num){
+            if (arr[mid] >= num){
+                //记录大于等于num的位置，直到下一次有满足条件的值刷新位置
                 index = mid;
-                l = mid + 1;
-            }else {
                 r = mid - 1;
+            }else{
+                l = mid + 1;
             }
         }
         return index;
     }
 
-    public static int nearRight2(int[] arr, int num){
+    public static int nearLeft1(int[] arr, int num){
         if (arr == null || arr.length == 0){
             return -1;
         }
-        for (int i = arr.length - 1; i >= 0; i--){
-            if (arr[i] <= num){
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] >= num){
                 return i;
             }
         }

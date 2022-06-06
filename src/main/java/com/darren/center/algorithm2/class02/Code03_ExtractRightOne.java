@@ -1,4 +1,4 @@
-package com.darren.center.algorithm2.class03;
+package com.darren.center.algorithm2.class02;
 
 /**
  * Author: Darren

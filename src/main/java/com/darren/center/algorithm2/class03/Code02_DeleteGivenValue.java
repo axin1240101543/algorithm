@@ -1,4 +1,4 @@
-package com.darren.center.algorithm2.class04;
+package com.darren.center.algorithm2.class03;
 
 /**
  * <h3>algorithm</h3>

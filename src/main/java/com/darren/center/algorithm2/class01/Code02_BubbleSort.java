@@ -1,4 +1,4 @@
-package com.darren.center.algorithm2.class02;
+package com.darren.center.algorithm2.class01;
 
 /**
  * <h3>spring-boot-2020-gitee</h3>

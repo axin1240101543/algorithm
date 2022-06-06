@@ -1,6 +1,6 @@
-package com.darren.center.algorithm2.class03;
+package com.darren.center.algorithm2.class02;
 
-import com.darren.center.algorithm2.class02.LogarithmMachine;
+import com.darren.center.algorithm2.class01.LogarithmMachine;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -12,11 +12,12 @@ import java.util.Set;
  * <p></p>
  *
  * @author : Darren
- * @date : 2022年02月17日 20:36:56
- * 一个数组的一种数出现k次（findKNumber方法只是将不是m次的数找出来），其他数都是m次，找到出现k次的这种数
+ * @date : 2022年02月17日 21:17:11
+ * 一个数组的一种数出现k次，其他数都是m次，找到出现k次的这种数
  * 限制：k < m, m > 1
+ * 返回出现k次的这种数，如果没有出现返回-1
  **/
-public class Code05_KMTimes {
+public class Code06_KMTimes2 {
 
     public static void main(String[] args) {
         int maxKinds = 10;
@@ -34,11 +35,13 @@ public class Code05_KMTimes {
                 m++;
             }
             int[] var1 = randomArray(maxKinds, maxValue, k, m);
-            int ans1 = findKNumber(var1, m);
+            int ans1 = findKNumber(var1, k, m);
             int ans2 = findKNumber2(var1, k, m);
             if (ans1 != ans2){
                 success = false;
                 LogarithmMachine.printArray(var1);
+                System.out.println(k);
+                System.out.println(m);
                 System.out.println(ans1);
                 System.out.println(ans2);
                 break;
@@ -49,11 +52,14 @@ public class Code05_KMTimes {
 
     public static int[] randomArray(int maxKinds, int maxValue, int k, int m){
         int targetNumber = randomNumber(maxValue);
+        //0.5的概率出现真命天子
+        //[0~m-2] -> [0~ m-1] 保证k < m
+        int times = Math.random() < 0.5 ? k : ((int)(Math.random() * (m - 1)) + 1);
         int kinds = randomPositiveNumberContain0(maxKinds) + 2;
-        int size = k + (kinds - 1) * m;
+        int size = times + (kinds - 1) * m;
         int[] arr = new int[size];
         int index = 0;
-        for(; index < k; index++){
+        for(; index < times; index++){
             arr[index] = targetNumber;
         }
         kinds--;
@@ -108,12 +114,12 @@ public class Code05_KMTimes {
 
     /**
      * 时间复杂度：O（N）
-     * 这个实现只是将不是m次的数返回，并不是返回k次的数，返回k次的数@com.darren.center.algorithm2.class03.Code06_KMTimes2
      * @param arr
+     * @param k
      * @param m
      * @return
      */
-    public static int findKNumber(int[] arr, int m){
+    public static int findKNumber(int[] arr, int k, int m){
         if (arr == null || arr.length == 0){
             return -1;
         }
@@ -133,9 +139,26 @@ public class Code05_KMTimes {
         int ans = 0;
         for (int i = 0; i <= 31; i++){
             //出现m次的数是1 这个位置肯定是m的倍数  模上m那么就会变成0 如果k次的数在这个位置上也是1 那么就不会等于0
-            if ((tmp[i] % m) != 0){
+            if ((tmp[i] % m) == 0){
+                continue;
+            }
+            if ((tmp[i] % m) == k){
                 //然后将第i位的1或进ans
                 ans |= (1 << i);
+            }else {
+                return -1;
+            }
+        }
+        //arr中出现了0 但是还是要用ans收集答案 所以处理0的个数等于k的情况
+        if (ans == 0){
+            int count = 0;
+            for (int num : arr) {
+                if (num == 0){
+                    count++;
+                }
+            }
+            if (count != k){
+                return -1;
             }
         }
         return ans;

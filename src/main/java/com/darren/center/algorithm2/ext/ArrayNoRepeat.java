@@ -1,6 +1,6 @@
 package com.darren.center.algorithm2.ext;
 
-import com.darren.center.algorithm2.class02.LogarithmMachine;
+import com.darren.center.algorithm2.class01.LogarithmMachine;
 
 import java.util.HashSet;
 import java.util.Set;

@@ -1,8 +1,6 @@
-package com.darren.center.algorithm2.class04;
+package com.darren.center.algorithm2.class03;
 
-import com.darren.center.algorithm2.class02.LogarithmMachine;
-
-import java.util.concurrent.atomic.AtomicInteger;
+import com.darren.center.algorithm2.class01.LogarithmMachine;
 
 /**
  * <h3>algorithm</h3>
