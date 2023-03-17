@@ -1,6 +1,7 @@
 package com.darren.center.algorithm2023;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Problem_0015_3Sum {
@@ -14,6 +15,7 @@ public class Problem_0015_3Sum {
         if (nums == null || nums.length == 0){
             return ans;
         }
+        Arrays.sort(nums);
         for (int i = 0; i < nums.length - 2; i++){
             if (i == 0 || nums[i] != nums[i - 1]){
                 List<List<Integer>> lists = twoSum(nums, i + 1, -nums[i]);
